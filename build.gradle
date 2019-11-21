@@ -49,12 +49,3 @@ test {
     // Use junit platform for unit tests
     useJUnitPlatform()
 }
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': 'nl.fortezza.skill.SkillSearcherApp'
-    }
-    archivesBaseName = 'skill-searcher-fat-jar'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
