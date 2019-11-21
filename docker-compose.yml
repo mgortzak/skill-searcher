@@ -1,0 +1,7 @@
+version: '3'
+services:
+  spark:
+    build: .
+    image: fortezza/skill-search-spark
+    ports:
+      - "4567:4567"
