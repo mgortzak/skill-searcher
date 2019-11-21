@@ -1,5 +1,7 @@
 package nl.fortezza.skill;
 
+import nl.fortezza.skill.service.ElasticService;
+
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 
@@ -11,5 +13,10 @@ public class SkillSearcherApp {
         staticFileLocation("/public");
 
         get(ROOT, Controllers::serveHomePage);
+
+        // Opvragen van de personen
+        get("/personen", (req, res) -> {
+            return ElasticService.getAllData();
+        });
     }
 }

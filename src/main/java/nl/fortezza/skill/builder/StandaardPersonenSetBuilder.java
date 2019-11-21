@@ -25,6 +25,12 @@ public final class StandaardPersonenSetBuilder {
                 .vaardigheden(new String[]{"Kotlin", "Javascript"})
                 .build()
         );
+        personen.add(Persoon.builder()
+                .naam("Han")
+                .voornaam("Solo")
+                .vaardigheden(new String[]{"Vliegen", "Crashen"})
+                .build()
+        );
 
         return personen;
     }

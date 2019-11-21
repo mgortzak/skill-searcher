@@ -1,6 +1,7 @@
 package nl.fortezza.skill.service;
 
 import com.google.gson.Gson;
+import nl.fortezza.skill.builder.StandaardPersonenSetBuilder;
 import nl.fortezza.skill.entiteiten.Persoon;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -21,6 +22,7 @@ public class ElasticService {
 
     private static final String URL = "http://localhost:9200";
     private static final String SEARCH = "posts/_search";
+    private static final String WRITE = "posts";
     private static final String INDEXNAME = "personen";
 
     static int sequenceNr = 101;
@@ -30,7 +32,9 @@ public class ElasticService {
     }
 
     public static String getAllData() throws IOException {
-        URL url = new URL(String.format("%s/%s/%s", URL, INDEXNAME, SEARCH));
+        String urlString = String.format("%s/%s/%s", URL, INDEXNAME, SEARCH);
+        System.out.println(urlString);
+        URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         StringBuilder result = new StringBuilder();
@@ -44,11 +48,21 @@ public class ElasticService {
         return result.toString();
     }
 
+    public static void writeAll() {
+        StandaardPersonenSetBuilder.getTestPersonen().forEach(persoon -> {
+            try {
+                write(persoon);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
     public static String write(Persoon persoon) throws IOException {
+        String url = String.format("%s/%s/%s/%s", URL, INDEXNAME, WRITE, sequenceNr++);
+        System.out.println(url);
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
-        String url = String.format("%s/%s/%s", URL, INDEXNAME, sequenceNr++);
         HttpPut httpPut = new HttpPut(url);
         httpPut.setHeader("Accept", "application/json");
         httpPut.setHeader("Content-type", "application/json");
